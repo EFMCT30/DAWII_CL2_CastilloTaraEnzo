@@ -3,13 +3,12 @@ package pe.edu.cibertec.DAWII_CL2_CastilloTaraEnzo.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.DAWII_CL2_CastilloTaraEnzo.model.Usuario;
 import pe.edu.cibertec.DAWII_CL2_CastilloTaraEnzo.service.UsuarioService;
 
@@ -48,6 +47,23 @@ public class AuthController {
     @PostMapping("/guardarUsuario")
     public String guardarUsuario(@ModelAttribute Usuario usuario){
         usuarioService.saveUser(usuario);
+        return "frontoffice/auth/frmLogin";
+    }
+
+    @PostMapping("/auth/cambiar-password")
+    public String cambiarPassword(@RequestParam String newPassword, @RequestParam String confirmPassword, Model model) {
+        if (newPassword.equals(confirmPassword)) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentUserName = authentication.getName();
+
+            Usuario usuario = usuarioService.findUserByUserName(currentUserName);
+            usuario.setPassword(newPassword);
+            usuarioService.saveUser(usuario);
+
+            model.addAttribute("mensaje", "Contraseña cambiada correctamente");
+        } else {
+            model.addAttribute("mensaje", "Las contraseñas no coinciden. Vuelva a intentarlo.");
+        }
         return "frontoffice/auth/frmLogin";
     }
 }

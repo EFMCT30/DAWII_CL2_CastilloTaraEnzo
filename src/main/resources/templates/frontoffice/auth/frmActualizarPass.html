@@ -18,21 +18,21 @@
             Cambiar Contraseña
         </div>
         <div class="card-body">
-            <form action="@{/auth/}" method="post">
+            <form th:action="@{/auth/cambiar-password}" method="post">
                 <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña Nueva</label>
-                    <input maxlength="15" type="text" class="form-control" name="password" id="password">
+                    <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                    <input maxlength="15" type="password" class="form-control" name="newPassword" id="newPassword">
                 </div>
                 <div class="mb-3">
-                    <label for="password1" class="form-label">Repita la contraseña</label>
-                    <input maxlength="15" type="password" class="form-control" name="password1" id="password1">
+                    <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
+                    <input maxlength="15" type="password" class="form-control" name="confirmPassword" id="confirmPassword">
                 </div>
-                <button type="submit" id="btningresar" class="btn btn-primary">
+                <button type="submit" id="btnCambiarPassword" class="btn btn-primary">
                     <i class="fas fa-save"></i>
-                    INGRESAR
+                    Cambiar Contraseña
                 </button>
-                <a class="btn btn-primary" href="@{/auth/registrar}" role="button">REGISTRARSE</a>
             </form>
+            <p th:text="${mensaje}"></p>
         </div>
     </div>
 </div>

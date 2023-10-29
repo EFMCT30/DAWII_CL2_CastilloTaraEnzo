@@ -20,27 +20,33 @@ public class SecurityConfig {
     private final DetalleUsuarioService detalleUsuarioService;
 
     @Bean
-    public SecurityFilterChain config (HttpSecurity http) throws Exception{
+    public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(
-                        auth ->
-                                auth.requestMatchers("/auth/login",
-                                                "/auth/registrar",
-                                                "/auth/guardarUsuario",
-                                                "/resources/**",
-                                                "/static/**",
-                                                "/styles/**",
-                                                "/scripts/**")
-                                        .permitAll()
-                                        .anyRequest()
-                                        .authenticated()
-                ).formLogin(
-                        login ->
-                                login.loginPage("/auth/login")
-                                        .defaultSuccessUrl("/auth/login")
-                                        .usernameParameter("nomusuario")
-                                        .passwordParameter("password")
-                ).authenticationProvider(authenticationProvider());
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/auth/login",
+                                        "/auth/registrar",
+                                        "/auth/guardarUsuario",
+                                        "/resources/**",
+                                        "/static/**",
+                                        "/styles/**",
+                                        "/scripts/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                ).formLogin(login ->
+                        login.loginPage("/auth/login")
+                                .defaultSuccessUrl("/auth/login")
+                                .usernameParameter("nomusuario")
+                                .passwordParameter("password")
+                ).authenticationProvider(authenticationProvider())
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/logout") // URL para cerrar sesión
+                                .logoutSuccessUrl("/auth/login") // Redirigir a esta URL después del cierre de sesión
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID") // Eliminar cookies al cerrar sesión
+                );
+
         return http.build();
     }
 
