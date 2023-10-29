@@ -24,6 +24,11 @@ public class AuthController {
         return "frontoffice/auth/frmLogin";
     }
 
+    @GetMapping("/actualizar")
+    public String cambiar(){
+        return "frontoffice/auth/frmActualizarPass";
+    }
+
     @GetMapping("/registrar")
     public String registrar(){
         return "frontoffice/auth/frmRegistroUsuario";
